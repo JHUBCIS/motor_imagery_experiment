@@ -1,0 +1,3 @@
+[console_scripts]
+eegexpy = eegnb.cli.__main__:main
+eegnb = eegnb.cli.__main__:main

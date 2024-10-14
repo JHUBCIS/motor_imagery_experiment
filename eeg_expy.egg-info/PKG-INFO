@@ -1,0 +1,279 @@
+Metadata-Version: 2.1
+Name: eeg-expy
+Version: 0.2
+Summary: python library for eeg cognitive neuroscience experiments
+Home-page: https://github.com/NeuroTechX/eeg-expy
+Author: John David Griffiths
+Author-email: j.davidgriffiths@gmail.com
+License: BSD (3-clause)
+Keywords: eeg,cognitive neuroscience,experiments,evoked response,auditory,visual
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: scikit-learn>=0.23.2
+Requires-Dist: pandas>=1.1.4
+Requires-Dist: numpy<1.24,>=1.19.4
+Requires-Dist: mne>=0.20.8
+Requires-Dist: seaborn>=0.11.0
+Requires-Dist: pyriemann>=0.2.7
+Requires-Dist: jupyter
+Requires-Dist: gdown>=4.5.1
+Requires-Dist: matplotlib>=3.3.3
+Requires-Dist: pysocks>=1.7.1
+Requires-Dist: pyserial>=3.5
+Requires-Dist: h5py>=3.1.0
+Requires-Dist: pytest-shutil
+Requires-Dist: pyo>=1.0.3; platform_system == "Linux"
+Requires-Dist: pyobjc==7.3; sys_platform == "darwin"
+Requires-Dist: airium>=0.1.0
+Requires-Dist: attrdict>=2.0.1
+Requires-Dist: attrdict3
+Provides-Extra: docsbuild
+Requires-Dist: recommonmark; extra == "docsbuild"
+Requires-Dist: brainflow; extra == "docsbuild"
+Requires-Dist: numpydoc; extra == "docsbuild"
+Requires-Dist: sphinx; extra == "docsbuild"
+Requires-Dist: sphinx-gallery; extra == "docsbuild"
+Requires-Dist: sphinx_rtd_theme; extra == "docsbuild"
+Requires-Dist: sphinx-tabs; extra == "docsbuild"
+Requires-Dist: sphinx-copybutton; extra == "docsbuild"
+Requires-Dist: sphinxcontrib-httpdomain; extra == "docsbuild"
+Requires-Dist: numpydoc; extra == "docsbuild"
+Requires-Dist: recommonmark; extra == "docsbuild"
+Requires-Dist: versioneer; extra == "docsbuild"
+Requires-Dist: rst2pdf; extra == "docsbuild"
+Requires-Dist: docutils; extra == "docsbuild"
+Requires-Dist: mypy; extra == "docsbuild"
+Requires-Dist: pytest; extra == "docsbuild"
+Requires-Dist: pytest-cov; extra == "docsbuild"
+Requires-Dist: nbval; extra == "docsbuild"
+Requires-Dist: types-requests; extra == "docsbuild"
+Provides-Extra: streaming
+Requires-Dist: muselsl>=2.0.2; extra == "streaming"
+Requires-Dist: pylsl==1.16.2; extra == "streaming"
+Requires-Dist: brainflow>=4.8.2; extra == "streaming"
+Requires-Dist: pysocks>=1.7.1; extra == "streaming"
+Requires-Dist: pyserial>=3.5; extra == "streaming"
+Requires-Dist: h5py>=3.1.0; extra == "streaming"
+Requires-Dist: pytest-shutil; extra == "streaming"
+Requires-Dist: pyo>=1.0.3; platform_system == "Linux" and extra == "streaming"
+Requires-Dist: pyobjc==7.3; sys_platform == "darwin" and extra == "streaming"
+Requires-Dist: pynput; extra == "streaming"
+Requires-Dist: airium>=0.1.0; extra == "streaming"
+Requires-Dist: attrdict>=2.0.1; extra == "streaming"
+Requires-Dist: attrdict3; extra == "streaming"
+Requires-Dist: click; extra == "streaming"
+Provides-Extra: stimpres
+Requires-Dist: pyobjc==7.3; sys_platform == "darwin" and extra == "stimpres"
+Requires-Dist: psychopy==2023.2.2; extra == "stimpres"
+Requires-Dist: psychopy-sounddevice; extra == "stimpres"
+Requires-Dist: psychtoolbox; extra == "stimpres"
+Requires-Dist: scikit-learn>=0.23.2; extra == "stimpres"
+Requires-Dist: pandas>=1.1.4; extra == "stimpres"
+Requires-Dist: numpy<1.24,>=1.19.4; extra == "stimpres"
+Requires-Dist: mne>=0.20.8; extra == "stimpres"
+Requires-Dist: seaborn>=0.11.0; extra == "stimpres"
+Requires-Dist: pysocks>=1.7.1; extra == "stimpres"
+Requires-Dist: pyserial>=3.5; extra == "stimpres"
+Requires-Dist: h5py>=3.1.0; extra == "stimpres"
+Requires-Dist: pytest-shutil; extra == "stimpres"
+Requires-Dist: pyo>=1.0.3; platform_system == "Linux" and extra == "stimpres"
+Requires-Dist: airium>=0.1.0; extra == "stimpres"
+Requires-Dist: attrdict>=2.0.1; extra == "stimpres"
+Requires-Dist: attrdict3; extra == "stimpres"
+Requires-Dist: wxPython>=4.0; platform_system == "Linux" and extra == "stimpres"
+Requires-Dist: pywinhook>=1.6.0; (platform_system == "Windows" and (python_version == "3.7" or python_version == "3.8")) and extra == "stimpres"
+Requires-Dist: pywinhook@ https://github.com/ActivityWatch/wheels/raw/master/pywinhook/pyWinhook-1.6.2-cp39-cp39-win_amd64.whl ; (platform_system == "Windows" and python_version == "3.9") and extra == "stimpres"
+Requires-Dist: pyglet==1.4.11; platform_system == "Windows" and extra == "stimpres"
+Requires-Dist: psychxr>=0.2.4rc2; platform_system == "Windows" and extra == "stimpres"
+Provides-Extra: streamstim
+Requires-Dist: muselsl>=2.0.2; extra == "streamstim"
+Requires-Dist: pylsl==1.16.2; extra == "streamstim"
+Requires-Dist: brainflow>=4.8.2; extra == "streamstim"
+Requires-Dist: pysocks>=1.7.1; extra == "streamstim"
+Requires-Dist: pyserial>=3.5; extra == "streamstim"
+Requires-Dist: h5py>=3.1.0; extra == "streamstim"
+Requires-Dist: pytest-shutil; extra == "streamstim"
+Requires-Dist: pyo>=1.0.3; platform_system == "Linux" and extra == "streamstim"
+Requires-Dist: pyobjc==7.3; sys_platform == "darwin" and extra == "streamstim"
+Requires-Dist: pynput; extra == "streamstim"
+Requires-Dist: airium>=0.1.0; extra == "streamstim"
+Requires-Dist: attrdict>=2.0.1; extra == "streamstim"
+Requires-Dist: attrdict3; extra == "streamstim"
+Requires-Dist: click; extra == "streamstim"
+Requires-Dist: pyobjc==7.3; sys_platform == "darwin" and extra == "streamstim"
+Requires-Dist: psychopy==2023.2.2; extra == "streamstim"
+Requires-Dist: psychopy-sounddevice; extra == "streamstim"
+Requires-Dist: psychtoolbox; extra == "streamstim"
+Requires-Dist: scikit-learn>=0.23.2; extra == "streamstim"
+Requires-Dist: pandas>=1.1.4; extra == "streamstim"
+Requires-Dist: numpy<1.24,>=1.19.4; extra == "streamstim"
+Requires-Dist: mne>=0.20.8; extra == "streamstim"
+Requires-Dist: seaborn>=0.11.0; extra == "streamstim"
+Requires-Dist: pysocks>=1.7.1; extra == "streamstim"
+Requires-Dist: pyserial>=3.5; extra == "streamstim"
+Requires-Dist: h5py>=3.1.0; extra == "streamstim"
+Requires-Dist: pytest-shutil; extra == "streamstim"
+Requires-Dist: pyo>=1.0.3; platform_system == "Linux" and extra == "streamstim"
+Requires-Dist: airium>=0.1.0; extra == "streamstim"
+Requires-Dist: attrdict>=2.0.1; extra == "streamstim"
+Requires-Dist: attrdict3; extra == "streamstim"
+Requires-Dist: wxPython>=4.0; platform_system == "Linux" and extra == "streamstim"
+Requires-Dist: pywinhook>=1.6.0; (platform_system == "Windows" and (python_version == "3.7" or python_version == "3.8")) and extra == "streamstim"
+Requires-Dist: pywinhook@ https://github.com/ActivityWatch/wheels/raw/master/pywinhook/pyWinhook-1.6.2-cp39-cp39-win_amd64.whl ; (platform_system == "Windows" and python_version == "3.9") and extra == "streamstim"
+Requires-Dist: pyglet==1.4.11; platform_system == "Windows" and extra == "streamstim"
+Requires-Dist: psychxr>=0.2.4rc2; platform_system == "Windows" and extra == "streamstim"
+Provides-Extra: full
+Requires-Dist: recommonmark; extra == "full"
+Requires-Dist: brainflow; extra == "full"
+Requires-Dist: numpydoc; extra == "full"
+Requires-Dist: sphinx; extra == "full"
+Requires-Dist: sphinx-gallery; extra == "full"
+Requires-Dist: sphinx_rtd_theme; extra == "full"
+Requires-Dist: sphinx-tabs; extra == "full"
+Requires-Dist: sphinx-copybutton; extra == "full"
+Requires-Dist: sphinxcontrib-httpdomain; extra == "full"
+Requires-Dist: numpydoc; extra == "full"
+Requires-Dist: recommonmark; extra == "full"
+Requires-Dist: versioneer; extra == "full"
+Requires-Dist: rst2pdf; extra == "full"
+Requires-Dist: docutils; extra == "full"
+Requires-Dist: mypy; extra == "full"
+Requires-Dist: pytest; extra == "full"
+Requires-Dist: pytest-cov; extra == "full"
+Requires-Dist: nbval; extra == "full"
+Requires-Dist: types-requests; extra == "full"
+Requires-Dist: muselsl>=2.0.2; extra == "full"
+Requires-Dist: pylsl==1.16.2; extra == "full"
+Requires-Dist: brainflow>=4.8.2; extra == "full"
+Requires-Dist: pysocks>=1.7.1; extra == "full"
+Requires-Dist: pyserial>=3.5; extra == "full"
+Requires-Dist: h5py>=3.1.0; extra == "full"
+Requires-Dist: pytest-shutil; extra == "full"
+Requires-Dist: pyo>=1.0.3; platform_system == "Linux" and extra == "full"
+Requires-Dist: pyobjc==7.3; sys_platform == "darwin" and extra == "full"
+Requires-Dist: pynput; extra == "full"
+Requires-Dist: airium>=0.1.0; extra == "full"
+Requires-Dist: attrdict>=2.0.1; extra == "full"
+Requires-Dist: attrdict3; extra == "full"
+Requires-Dist: click; extra == "full"
+Requires-Dist: pyobjc==7.3; sys_platform == "darwin" and extra == "full"
+Requires-Dist: psychopy==2023.2.2; extra == "full"
+Requires-Dist: psychopy-sounddevice; extra == "full"
+Requires-Dist: psychtoolbox; extra == "full"
+Requires-Dist: scikit-learn>=0.23.2; extra == "full"
+Requires-Dist: pandas>=1.1.4; extra == "full"
+Requires-Dist: numpy<1.24,>=1.19.4; extra == "full"
+Requires-Dist: mne>=0.20.8; extra == "full"
+Requires-Dist: seaborn>=0.11.0; extra == "full"
+Requires-Dist: pysocks>=1.7.1; extra == "full"
+Requires-Dist: pyserial>=3.5; extra == "full"
+Requires-Dist: h5py>=3.1.0; extra == "full"
+Requires-Dist: pytest-shutil; extra == "full"
+Requires-Dist: pyo>=1.0.3; platform_system == "Linux" and extra == "full"
+Requires-Dist: airium>=0.1.0; extra == "full"
+Requires-Dist: attrdict>=2.0.1; extra == "full"
+Requires-Dist: attrdict3; extra == "full"
+Requires-Dist: wxPython>=4.0; platform_system == "Linux" and extra == "full"
+Requires-Dist: pywinhook>=1.6.0; (platform_system == "Windows" and (python_version == "3.7" or python_version == "3.8")) and extra == "full"
+Requires-Dist: pywinhook@ https://github.com/ActivityWatch/wheels/raw/master/pywinhook/pyWinhook-1.6.2-cp39-cp39-win_amd64.whl ; (platform_system == "Windows" and python_version == "3.9") and extra == "full"
+Requires-Dist: pyglet==1.4.11; platform_system == "Windows" and extra == "full"
+Requires-Dist: psychxr>=0.2.4rc2; platform_system == "Windows" and extra == "full"
+
+=============
+EEG-ExPy
+=============
+
+*Democratizing the cognitive neuroscience experiment*
+
+|badge_test| |badge_binder|
+
+.. |badge_test| image:: https://github.com/NeuroTechX/eeg-expy/workflows/Test/badge.svg
+   :target: https://github.com/NeuroTechX/eeg-expy/actions
+
+.. |badge_binder| image:: https://mybinder.org/badge_logo.svg
+   :target: https://mybinder.org/v2/gh/NeuroTechX/eeg-expy/master
+
+.. image:: ./doc/img/EEG-ExPy_Logo.png
+   :align: center
+
+
+EEG-ExPy is a collection of classic EEG experiments, implemented in Python. The experimental protocols and analyses are quite generic, but are primarily taylored for low-budget / consumer EEG hardware such as the InteraXon MUSE and OpenBCI Cyton. The goal is to make cognitive neuroscience and neurotechnology more accessible, affordable, and scalable. 
+
+- **For an intro talk on the ***EEG-ExPy*** (formerly ***eeg-notebooks***) project see:** `JG's Brainhack Ontario presentation <https://www.crowdcast.io/e/brainhack-ontario/7>`_.  
+- **For documentation see:** `documentation site <https://neurotechx.github.io/EEG-ExPy/index.html>`_.
+- **For code see:** `github site <https://github.com/neurotechx/eeg-expy>`_.
+- **For instructions on running experiments see:** `running experiments <https://neurotechx.github.io/EEG-ExPy/getting_started/running_experiments.html>`_.
+- **For instructions on initiating an EEG stream see:** `initiating an EEG stream <https://neurotechx.github.io/EEG-ExPy/getting_started/streaming.html>`_.
+- **A series of tutorial videos will be coming soon!**  
+
+
+----
+
+**Note:** eeg-expy was previously known as eeg-notebooks. Before the renaming, eeg-notebooks also underwent major changes to the API in v0.2. The old v0.2 version, before the name change, is still available if you need it, in `this repo <https://github.com/neurotechx/eeg-notebooks_v0.2>`_. The even older v0.1 is also still available if needed `here <https://github.com/neurotechx/eeg-notebooks_v0.1>`_.
+
+----
+
+
+Overview
+--------
+
+Conventional lab-based EEG research typically uses research-grade (often high-density) EEG devices, dedicated stimulus delivery software and hardware, and dedicated technicians responsible for operating this equipment. The price tag for these items can easily extend into hundreds of thousands of dollars, which naturally places major limits on their acquisition and usage. 
+
+In recent years, however, developments in hardware and software technologies are making it possible for many classic EEG cognitive neuroscience experiments to be conducted using a standard laptop/personal computer and a relatively cheap consumer-grade EEG device, with a combined minimum cost of less than 1000 dollars. This opens dramatic new possibilities for neurotechnology and cognitive neuroscience *education* (at both University and High School levels), as well as more ambitious and larger-scale *research* and *clinical* applications using large numbers of devices, and/or in more naturalistic (i.e. out-of-the-lab) settings. We like to think of this as contributing to the *democratization of the cognitive neuroscience experiment*.
+
+The core aim of the EEG-Notebooks project is to provide the critical 'glue' that pulls together the various enabling technologies necessary for running these experiments and analyzing the data. This includes functionality for 
+
+* streaming data from various relatively new wireless consumer-grade EEG devices  
+* visual and auditory stimulus presentation, concurrent with and time-locked to the EEG recordings  
+* a growing library of well-documented, ready-to-use, and ready-to-modify experiments 
+* signal processing, statistical, and machine learning data analysis functionalities
+
+A real one-stop-shop!
+
+For more discussion on these social/scientific/technological contexts and trajectories, a) feel free to get in touch directly (see #Contact info below) and b) keep an eye out for the forthcoming eeg-expy research paper.
+
+
+Documentation
+-------------
+
+The current version of eeg-expy is the 0.2.X series. The code-base and API are under major development and subject to change.
+
+Check the `changelog <https://neurotechx.github.io/EEG-ExPy/changelog.html>`_ for notes on changes from previous versions.
+
+**Installation instructions**, steps for **getting started**, common **troubleshooting** solutions and more can be found in the documentation for eeg-expy, available on the
+`documentation site <https://neurotechx.github.io/EEG-ExPy/index.html>`_.
+
+Acknowledgments
+----------------
+
+EEG-Notebooks was created by the `NeurotechX <https://neurotechx.com/>`_ hacker/developer/neuroscience community. The ininitial idea and majority of the groundwork was due to Alexandre Barachant - including the `muse-lsl <https://github.com/alexandrebarachant/muse-lsl/>`_ library, which is core dependency. Lead developer on the project is now `John Griffiths <www.grifflab.com>`_ . 
+
+Key contributors include: Alexandre Barachant, Hubert Banville, Dano Morrison, Ben Shapiro, John Griffiths, Amanda Easson, Kyle Mathewson, Jadin Tredup, Erik Bjäreholt. 
+
+Thanks also to Andrey Parfenov for the excellent `brainflow <https://github.com/brainflow-dev/brainflow/>`_ library, which has allowed us to dramatically expand the range of supporte devices; as well as the developers of `PsychoPy <https://github.com/psychopy/psychopy/>`_ and `MNE <https://github.com/mne-tools/mne-python/>`_, which together make up the central scaffolding of eeg-expy. 
+
+
+Contribute
+----------
+
+This project welcomes and encourages contributions from the community!
+
+If you have an idea of something to add to eeg-expy, please start by opening an
+`issue <https://github.com/NeuroTechX/eeg-expy/issues/new/choose>`_.
+
+
+Contact
+-------------
+
+The best place for general discussion on eeg-expy functionality is the `issues page <https://github.com/NeuroTechX/eeg-expy/issues/new/choose>`_. For more general questions and discussions, you can e-mail `john.griffiths@utoronto.ca`, or ping us on the `NeuroTechX Discord <https://discord.gg/zYCBfBf4W4>`_ or `NeuroTechX slack <https://neurotechx.herokuapp.com>`_.
+
+
+
+.. image:: ./doc/img/eeg-notebooks_democratizing_the_cogneuro_experiment.png
+   :align: center
+   :scale: 50
+   

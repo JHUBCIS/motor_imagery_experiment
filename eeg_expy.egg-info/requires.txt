@@ -1,0 +1,190 @@
+scikit-learn>=0.23.2
+pandas>=1.1.4
+numpy<1.24,>=1.19.4
+mne>=0.20.8
+seaborn>=0.11.0
+pyriemann>=0.2.7
+jupyter
+gdown>=4.5.1
+matplotlib>=3.3.3
+pysocks>=1.7.1
+pyserial>=3.5
+h5py>=3.1.0
+pytest-shutil
+airium>=0.1.0
+attrdict>=2.0.1
+attrdict3
+
+[:platform_system == "Linux"]
+pyo>=1.0.3
+
+[:sys_platform == "darwin"]
+pyobjc==7.3
+
+[docsbuild]
+recommonmark
+brainflow
+numpydoc
+sphinx
+sphinx-gallery
+sphinx_rtd_theme
+sphinx-tabs
+sphinx-copybutton
+sphinxcontrib-httpdomain
+versioneer
+rst2pdf
+docutils
+mypy
+pytest
+pytest-cov
+nbval
+types-requests
+
+[full]
+recommonmark
+brainflow
+numpydoc
+sphinx
+sphinx-gallery
+sphinx_rtd_theme
+sphinx-tabs
+sphinx-copybutton
+sphinxcontrib-httpdomain
+versioneer
+rst2pdf
+docutils
+mypy
+pytest
+pytest-cov
+nbval
+types-requests
+muselsl>=2.0.2
+pylsl==1.16.2
+brainflow>=4.8.2
+pysocks>=1.7.1
+pyserial>=3.5
+h5py>=3.1.0
+pytest-shutil
+pynput
+airium>=0.1.0
+attrdict>=2.0.1
+attrdict3
+click
+psychopy==2023.2.2
+psychopy-sounddevice
+psychtoolbox
+scikit-learn>=0.23.2
+pandas>=1.1.4
+numpy<1.24,>=1.19.4
+mne>=0.20.8
+seaborn>=0.11.0
+
+[full:platform_system == "Linux"]
+pyo>=1.0.3
+wxPython>=4.0
+
+[full:platform_system == "Windows"]
+pyglet==1.4.11
+psychxr>=0.2.4rc2
+
+[full:platform_system == "Windows" and (python_version == "3.7" or python_version == "3.8")]
+pywinhook>=1.6.0
+
+[full:platform_system == "Windows" and python_version == "3.9"]
+pywinhook@ https://github.com/ActivityWatch/wheels/raw/master/pywinhook/pyWinhook-1.6.2-cp39-cp39-win_amd64.whl
+
+[full:sys_platform == "darwin"]
+pyobjc==7.3
+
+[stimpres]
+psychopy==2023.2.2
+psychopy-sounddevice
+psychtoolbox
+scikit-learn>=0.23.2
+pandas>=1.1.4
+numpy<1.24,>=1.19.4
+mne>=0.20.8
+seaborn>=0.11.0
+pysocks>=1.7.1
+pyserial>=3.5
+h5py>=3.1.0
+pytest-shutil
+airium>=0.1.0
+attrdict>=2.0.1
+attrdict3
+
+[stimpres:platform_system == "Linux"]
+pyo>=1.0.3
+wxPython>=4.0
+
+[stimpres:platform_system == "Windows"]
+pyglet==1.4.11
+psychxr>=0.2.4rc2
+
+[stimpres:platform_system == "Windows" and (python_version == "3.7" or python_version == "3.8")]
+pywinhook>=1.6.0
+
+[stimpres:platform_system == "Windows" and python_version == "3.9"]
+pywinhook@ https://github.com/ActivityWatch/wheels/raw/master/pywinhook/pyWinhook-1.6.2-cp39-cp39-win_amd64.whl
+
+[stimpres:sys_platform == "darwin"]
+pyobjc==7.3
+
+[streaming]
+muselsl>=2.0.2
+pylsl==1.16.2
+brainflow>=4.8.2
+pysocks>=1.7.1
+pyserial>=3.5
+h5py>=3.1.0
+pytest-shutil
+pynput
+airium>=0.1.0
+attrdict>=2.0.1
+attrdict3
+click
+
+[streaming:platform_system == "Linux"]
+pyo>=1.0.3
+
+[streaming:sys_platform == "darwin"]
+pyobjc==7.3
+
+[streamstim]
+muselsl>=2.0.2
+pylsl==1.16.2
+brainflow>=4.8.2
+pysocks>=1.7.1
+pyserial>=3.5
+h5py>=3.1.0
+pytest-shutil
+pynput
+airium>=0.1.0
+attrdict>=2.0.1
+attrdict3
+click
+psychopy==2023.2.2
+psychopy-sounddevice
+psychtoolbox
+scikit-learn>=0.23.2
+pandas>=1.1.4
+numpy<1.24,>=1.19.4
+mne>=0.20.8
+seaborn>=0.11.0
+
+[streamstim:platform_system == "Linux"]
+pyo>=1.0.3
+wxPython>=4.0
+
+[streamstim:platform_system == "Windows"]
+pyglet==1.4.11
+psychxr>=0.2.4rc2
+
+[streamstim:platform_system == "Windows" and (python_version == "3.7" or python_version == "3.8")]
+pywinhook>=1.6.0
+
+[streamstim:platform_system == "Windows" and python_version == "3.9"]
+pywinhook@ https://github.com/ActivityWatch/wheels/raw/master/pywinhook/pyWinhook-1.6.2-cp39-cp39-win_amd64.whl
+
+[streamstim:sys_platform == "darwin"]
+pyobjc==7.3

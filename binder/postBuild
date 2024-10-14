@@ -1,0 +1,6 @@
+pip install -r requirements-noeeg.txt
+pip install -e .
+
+cd examples
+wget https://neurotechx.github.io/eeg-notebooks/_downloads/894670a281f2dbcc8773156c5c011d11/auto_examples_jupyter.zip
+unzip auto_examples_jupyter.zip
