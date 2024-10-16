@@ -7,7 +7,7 @@ import threading
 import numpy as np
 import random
 from pandas import DataFrame
-from psychopy import visual, core, event, constants
+from psychopy import visual, core, event
 
 from eegnb.experiments import Experiment
 # from eegnb.devices.EMA_Filters import EMA_Filters
@@ -22,12 +22,13 @@ import socket
 
 class VisualFunni_select_unicorn(Experiment.BaseExperiment):
     '''
-    Welcome to the experiment
+    Blah Blah Blah it's cool :)
+
     EEG Data streamed and recorded through the Unicorn Recorder
     '''
     def __init__(self, duration, IP = "127.0.0.1", Port = 800):
       
-        exp_name = "Motor Imagery "
+        exp_name = "Funni Experiment Thingy"
         super().__init__(exp_name, duration, eeg = None, save_fn = None, n_trials = None, iti = None, soa = None, jitter = None)
         # self.instruction_text = """\n
         # Welcome to the {} experiment!\n\n
@@ -53,8 +54,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
 
     def load_stimulus(self): 
 
-        # video_path = ""
-        # self.video = visual.MovieStim3(win=self.window, filename=video_path, size=(640, 480))
+
         # self.fixation = visual.GratingStim(win=self.window, size=0.2, pos=[0, 8], sf=0.2, color=[1, 0, 0], autoDraw=True)
 
         
@@ -97,69 +97,76 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
 
         log_key_input()
 
-        start_time = time()   
+        # Present stim
+
+
+        start_time = time()
+        
         self.socket.sendto(b"1", self.endPoint)
         
 
         VIDEO_DURATION = 5
         INSTRUCTION_DURATION = 2
-        ACTION_DURATION = 5
+        TRIAL_DURATION = 5
         REST_DURATION = 5
 
-        NUM_SETS = int(self.record_duration // (VIDEO_DURATION + INSTRUCTION_DURATION + ACTION_DURATION + REST_DURATION))
+        NUM_SETS = int(self.record_duration // (VIDEO_DURATION + INSTRUCTION_DURATION + TRIAL_DURATION + REST_DURATION))
 
         
         for i in range(NUM_SETS):
-            # Run a set of trials with and without visual stimulus
-            self.run_set(True, VIDEO_DURATION, INSTRUCTION_DURATION, ACTION_DURATION, REST_DURATION)  # With video
-            self.run_set(False, VIDEO_DURATION, INSTRUCTION_DURATION, ACTION_DURATION, REST_DURATION)  # Without video  
+            self.run_set("", VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
+                
         
         # keyboard.unhook_all()
 
-    def run_set(self, with_video, vid_dur, inst_dur, action_dur, rest_dur):
-        """Runs a set of trials based on whether there's a visual stimulus."""
+    def run_set(self, video_path, vid_dur, inst_dur, trial_dur, rest_dur):
         set_start_time = time()
+        self.trial_cycle(True, True, video_path, vid_dur, inst_dur, trial_dur, rest_dur)
+        self.trial_cycle(True, False, video_path, vid_dur, inst_dur, trial_dur, rest_dur)
+        self.trial_cycle(False, True, video_path, vid_dur, inst_dur, trial_dur, rest_dur)
+        self.trial_cycle(False, False, video_path, vid_dur, inst_dur, trial_dur, rest_dur)
+
+    def trial_cycle(self, with_video, is_imagery, video_path, vid_dur, inst_dur, trial_dur, rest_dur):
         
-        # Cycle between trials with and without video
-        if with_video:
-            self.trial_cycle(True, True, vid_dur, inst_dur, action_dur, rest_dur)  # Video + Action
-        else:
-            self.trial_cycle(False, True, vid_dur, inst_dur, action_dur, rest_dur)  # No Video, only Action
+        action_prompt = visual.TextStim(
+                    self.window, 
+                    text=(
+                        "Prepare to do\n"
+                        "the action shown.\n"
+                        ), 
+                    wrapWidth=30,
+                    alignText='center',
+                    color='white')
+        
+        imagery_prompt = visual.TextStim(
+                    self.window, 
+                    text=(
+                        "Prepare to imagine\n"
+                        "the action shown.\n"
+                        ), 
+                    wrapWidth=30,
+                    alignText='center',
+                    color='white')
+        
+        perform_prompt = visual.TextStim(
+                    self.window, 
+                    text=(
+                        "DO\n"
+                        "IT!\n"
+                        ), 
+                    wrapWidth=30,
+                    alignText='center',
+                    color='white')
 
-
-    def trial_cycle(self, with_video, is_imagery, video_path, vid_dur, inst_dur, action_dur, rest_dur):
-        action_prompt = visual.TextStim(self.window, text="Prepare to do\nthe action shown.", wrapWidth=30, alignText='center', color='white')
-        imagery_prompt = visual.TextStim(self.window, text="Prepare to imagine\nthe action shown.", wrapWidth=30, alignText='center', color='white')
-        perform_prompt = visual.TextStim(self.window, text="DO\nIT!", wrapWidth=30, alignText='center', color='white')
-        rest_prompt = visual.TextStim(self.window, text="Rest for 5 seconds.\nPrepare for next trial.", wrapWidth=30, alignText='center', color='white')
-
-        # 1. Show video (if applicable)
-        if with_video:
-            video_start_time = time()
-            while self.running and time() < (video_start_time + vid_dur):
-                # Play video here
-                self.window.flip()
-
-        # 2. Show instructions (2 seconds)
-        instruction_start_time = time()
-        while self.running and time() < (instruction_start_time + inst_dur):
-            if is_imagery:
-                imagery_prompt.draw()
-            else:
-                action_prompt.draw()
-            self.window.flip()
-
-        # 3. Perform/imagine movement (5 seconds)
-        perform_start_time = time()
-        while self.running and time() < (perform_start_time + action_dur):
-            perform_prompt.draw()
-            self.window.flip()
-
-        # 4. Rest (5 seconds)
-        rest_start_time = time()
-        while self.running and time() < (rest_start_time + rest_dur):
-            rest_prompt.draw()
-            self.window.flip()
+        rest_prompt = visual.TextStim(
+                    self.window, 
+                    text=(
+                        "Rest for 5 seconds.\n"
+                        "Prepare for next trial.\n"
+                        ), 
+                    wrapWidth=30,
+                    alignText='center',
+                    color='white')
 
 
         video_start_time = time()
@@ -167,7 +174,13 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             current_time = time()
             #video imagine, video 
             if (with_video):
-                pass # PLAY VIDEO HERE :)
+                # pass # PLAY VIDEO HERE :)
+                video_path = r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\visual_ssvep\wrist_flexing_right-1.mp4"
+                # self.video = visual.MovieStim3(win=self.window, filename=video_path, size=(640, 480))
+                mov = visual.MovieStim3(self.window, video_path, size=(800, 600),flipVert=False, flipHoriz=False, loop=False)
+                while mov.status != visual.FINISHED and self.running:
+                    mov.draw()
+                    self.window.flip()
             
 
             self.window.flip()
@@ -183,7 +196,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             self.window.flip()
         
         perform_start_time = time()
-        while self.running and time() < (perform_start_time + action_dur): # show perform prompt
+        while self.running and time() < (perform_start_time + trial_dur): # show perform prompt
             perform_prompt.draw()
             self.window.flip()
         
@@ -206,7 +219,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             # self.trials = DataFrame(dict(parameter=self.parameter, timestamp=np.zeros(self.n_trials)))
 
             # Setting up Graphics 
-            self.window = visual.Window([1536, 864], winType='glfw', monitor="testMonitor", units="deg", fullscr=True) 
+            self.window = visual.Window([1536, 864], monitor="testMonitor", units="deg", fullscr=True) 
             self.window.color = 'black' # set background color to black
             self.window.flip()
             
@@ -235,59 +248,43 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
 
     def run(self, instructions=True):
 
-        #Setup the experiment, alternatively could get rid of this line, something to think about
+        # Setup the experiment, alternatively could get rid of this line, something to think about
         self.setup(instructions)
 
-        win = visual.Window(size=(800, 600), winType='glfw')
-        mov = visual.MovieStim3(win, 'eegnb/experiments/visual_ssvep/wrist_flexing_right-1.mp4', size=(320, 240),
-        flipVert=False, flipHoriz=False, loop=False)
-        print('orig movie size=%s' % mov.size)
-        print('duration=%.2fs' % mov.duration)
-        globalClock = core.Clock()
+        # print("Wait for the EEG-stream to start...")
 
-        while mov.status != constants.FINISHED:
-            mov.draw()
-            win.flip()
-            if event.getKeys():
-                break
+        # emaFilt = EMA_Filters()
+        # self._stop_event = threading.Event()
+        # def eeg_stream_thread():
+        #     eeg = self.eeg
+        #     sfreq = eeg.sfreq
+        #     bp_fc_low = self.bp_fc_low
+        #     bp_fc_high = self.bp_fc_high
+        #     n_fc = self.n_fc
 
-        win.close()
-        core.quit()
+        #     while eeg.stream_started and not self._stop_event.is_set():
+        #         data = eeg.board.get_current_board_data(1)
+        #         _, eeg_data, timestamps = eeg._brainflow_extract(data)
+        #         eeg_data_filt = emaFilt.BPF(eeg_data, bp_fc_low, bp_fc_high, sfreq) #bandpass filter
+        #         eeg_data_filt = emaFilt.Notch(eeg_data_filt, n_fc, sfreq) #notch filter
+        #         if len(eeg_data) > 0 and len(timestamps) > 0: # only update if neither is empty
+        #             last_timestamp = data[eeg.timestamp_channel][0]
+        #             eeg.filt_data.append([eeg_data_filt[0].tolist(), last_timestamp])
+        #         else:
+        #             time.sleep(1)
+        #             continue
 
-        print("Wait for the EEG-stream to start...")
-
-        #emaFilt = EMA_Filters()
-        self._stop_event = threading.Event()
-        def eeg_stream_thread():
-            eeg = self.eeg
-            sfreq = eeg.sfreq
-            bp_fc_low = self.bp_fc_low
-            bp_fc_high = self.bp_fc_high
-            n_fc = self.n_fc
-
-            while eeg.stream_started and not self._stop_event.is_set():
-                data = eeg.board.get_current_board_data(1)
-                _, eeg_data, timestamps = eeg._brainflow_extract(data)
-                #eeg_data_filt = emaFilt.BPF(eeg_data, bp_fc_low, bp_fc_high, sfreq) #bandpass filter
-                #eeg_data_filt = emaFilt.Notch(eeg_data_filt, n_fc, sfreq) #notch filter
-                if len(eeg_data) > 0 and len(timestamps) > 0: # only update if neither is empty
-                    last_timestamp = data[eeg.timestamp_channel][0]
-                    #eeg.filt_data.append([eeg_data_filt[0].tolist(), last_timestamp])
-                else:
-                    time.sleep(1)
-                    continue
-
-        #Start EEG Stream, wait for signal to settle, and then pull timestamp for start point
-        if self.eeg:
-            self.eeg.start(self.save_fn, duration=self.record_duration + 10)
-            print("eeg stream started")
-            eeg_filt_thread = threading.Thread(target=eeg_stream_thread)
-            eeg_filt_thread.daemon = True
-            eeg_filt_thread.start()
-            # time.sleep(10)
-            print("eeg_filt_thread initiated")
-        else: 
-            print("No EEG headset connected")
+        # Start EEG Stream, wait for signal to settle, and then pull timestamp for start point
+        # if self.eeg:
+        #     self.eeg.start(self.save_fn, duration=self.record_duration + 10)
+        #     print("eeg stream started")
+        #     eeg_filt_thread = threading.Thread(target=eeg_stream_thread)
+        #     eeg_filt_thread.daemon = True
+        #     eeg_filt_thread.start()
+        #     # time.sleep(10)
+        #     print("eeg_filt_thread initiated")
+        # else: 
+        #     print("No EEG headset connected")
 
         print("Experiment started")
         
@@ -297,13 +294,13 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
 
 
         # Closing the EEG stream 
-        if self.eeg:
-            self._stop_event.set()
-            eeg_filt_thread.join()
-            print("eeg_filt_thread terminated")
+        # if self.eeg:
+        #     self._stop_event.set()
+        #     eeg_filt_thread.join()
+        #     print("eeg_filt_thread terminated")
 
-            self.eeg._stop_brainflow_save_filt()
-            print("Stop EEG stream")
-            print("Recording saved at", self.save_fn)
+        #     self.eeg._stop_brainflow_save_filt()
+        #     print("Stop EEG stream")
+        #     print("Recording saved at", self.save_fn)
         # Closing the window
         self.window.close()
