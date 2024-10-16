@@ -39,5 +39,5 @@ print(save_fn)
 # Run experiment
 # ---------------------  
 #  
-ssvep = VisualFunni_select_unicorn(duration=record_duration)
+ssvep = VisualFunni_select_unicorn(record_duration)
 ssvep.run()

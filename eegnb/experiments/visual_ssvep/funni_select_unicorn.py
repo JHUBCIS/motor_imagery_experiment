@@ -110,12 +110,24 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         TRIAL_DURATION = 5
         REST_DURATION = 5
 
-        NUM_SETS = int(self.record_duration // (VIDEO_DURATION + INSTRUCTION_DURATION + TRIAL_DURATION + REST_DURATION))
+        NUM_SETS = 10
+        NUM_MI_SETS = 15
+
+        video_path_1 = "eegnb/experiments/visual_ssvep/wrist_flexing_right-1.mp4"
+        video_path_2 = "eegnb/experiments/visual_ssvep/wrist_flexing_right-1.mp4"
 
         
         for i in range(NUM_SETS):
-            self.run_set("", VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
-                
+            self.run_set(video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
+            self.run_set(video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
+
+        for i in range(NUM_MI_SETS):
+            self.trial_cycle(False, False, video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
+            self.trial_cycle(False, False, video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
+
+
+
+
         
         # keyboard.unhook_all()
 
@@ -211,7 +223,6 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
     def setup(self, instructions=True):
 
             # Initializing the record duration and the marker names
-            self.record_duration = np.float32(self.duration)
             self.markernames = [1, 2]
             
             # Setting up the trial and parameter list
