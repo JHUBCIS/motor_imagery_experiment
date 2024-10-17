@@ -29,7 +29,7 @@ record_duration = 120
 # ---------------------
 #
 # Start EEG device
-# eeg_device = EEG(board_name)
+eeg_device = EEG(board_name)
 
 # Create save file name
 save_fn = generate_save_fn(board_name, experiment, subject_id, session_nb)
@@ -39,5 +39,5 @@ print(save_fn)
 # Run experiment
 # ---------------------  
 #  
-ssvep = VisualFunni_select_unicorn(record_duration)
+ssvep = VisualFunni_select_unicorn(eeg_device, record_duration)
 ssvep.run()

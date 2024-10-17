@@ -20,16 +20,18 @@ import keyboard
 import socket
 
 
+
+
 class VisualFunni_select_unicorn(Experiment.BaseExperiment):
     '''
     Blah Blah Blah it's cool :)
 
     EEG Data streamed and recorded through the Unicorn Recorder
     '''
-    def __init__(self, duration, IP = "127.0.0.1", Port = 800):
+    def __init__(self, duration, eeg: Optional[EEG] = None, IP = "127.0.0.1", Port = 800):
       
         exp_name = "motor_imagery"
-        super().__init__(exp_name, duration, eeg = None, save_fn = None, n_trials = None, iti = None, soa = None, jitter = None)
+        super().__init__(exp_name, duration, eeg, save_fn = None, n_trials = None, iti = None, soa = None, jitter = None)
         # self.instruction_text = """\n
         # Welcome to the {} experiment!\n\n
         # When stimuli are presented, use left/right arrow to indicate which stimulus you are looking at.\n
@@ -60,32 +62,25 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
 
         #Push sample
         #replace with pushing dependent on key input
-        if self.eeg:
-            timestamp = time()
-            if self.eeg.backend == "muselsl":
-                marker = [self.markernames[ind]]
-            else:
-                marker = self.markernames[ind]
-            self.eeg.push_sample(marker=marker, timestamp=timestamp)
 
-        def log_key_input():
-            # nonlocal running
-            def on_key_event(event):
-                if event.name == 'left' or event.name == 'right':
-                    marker = 1 if event.name == 'left' else 2
-                    # print("Marker logged:", marker)
-                    timestamp = time()
-                    if self.eeg:
-                        self.eeg.push_sample(marker=marker, timestamp=timestamp)
-                elif event.name == 'space':
-                    print("Experiment interrupted by user")
-                    # if self.eeg: self.eeg._stop_brainflow(), print(self.save_fn)
-                    self.running = False
-            keyboard.on_press(on_key_event)
-            # return on_key_event
-
-        event_handler = log_key_input(self)
-        log_key_input()
+        # def log_key_input():
+        #     # nonlocal running
+        #     def on_key_event(event):
+        #         if event.name == 'left' or event.name == 'right':
+        #             marker = 1 if event.name == 'left' else 2
+        #             # print("Marker logged:", marker)
+        #             timestamp = time()
+        #             if self.eeg:
+        #                 self.eeg.push_sample(marker=marker, timestamp=timestamp)
+        #         elif event.name == 'space':
+        #             print("Experiment interrupted by user")
+        #             # if self.eeg: self.eeg._stop_brainflow(), print(self.save_fn)
+        #             self.running = False
+        #     keyboard.on_press(on_key_event)
+        #     # return on_key_event
+        #
+        # event_handler = log_key_input(self)
+        # log_key_input()
 
         # Present stim
 
@@ -108,18 +103,30 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
 
         
         for i in range(NUM_SETS):
+            marker = "Movement 1 4 Blocks"
+            timestamp = time()
+            self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.run_set(video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
+            Marker = "Movement 2 4 Blocks"
+            timestamp = time()
+            self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.run_set(video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
 
         for i in range(NUM_MI_SETS):
+            marker = "Movement 1 Motor Imagery"
+            timestamp = time()
+            self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.trial_cycle(False, False, video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
+            marker = "Movement 2 Motor Imagery"
+            timestamp = time()
+            self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.trial_cycle(False, False, video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
 
 
 
 
         
-        keyboard.unhook_all()
+        # keyboard.unhook_all()
 
     def run_set(self, video_path, vid_dur, inst_dur, trial_dur, rest_dur):
         set_start_time = time()
@@ -149,16 +156,26 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
                     wrapWidth=30,
                     alignText='center',
                     color='white')
-        
-        perform_prompt = visual.TextStim(
-                    self.window, 
-                    text=(
-                        "DO\n"
-                        "IT!\n"
-                        ), 
-                    wrapWidth=30,
-                    alignText='center',
-                    color='white')
+        perform_action_prompt = visual.TextStim(
+            self.window,
+            text=(
+                "Perform the \n"
+                "action shown.\n"
+            ),
+            wrapWidth=30,
+            alignText='center',
+            color='white')
+
+        perform_imagery_prompt = visual.TextStim(
+            self.window,
+            text=(
+                "Imagine the\n"
+                "action shown.\n"
+            ),
+            wrapWidth=30,
+            alignText='center',
+            color='white')
+
 
         rest_prompt = visual.TextStim(
                     self.window, 
@@ -199,7 +216,10 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         
         perform_start_time = time()
         while self.running and time() < (perform_start_time + trial_dur): # show perform prompt
-            perform_prompt.draw()
+            if (is_imagery):
+                perform_imagery_prompt.draw()
+            else:
+                perform_action_prompt.draw()
             self.window.flip()
         
         rest_start_time = time()
