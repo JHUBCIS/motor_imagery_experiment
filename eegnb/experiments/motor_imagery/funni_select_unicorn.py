@@ -10,13 +10,13 @@ from pandas import DataFrame
 from psychopy import visual, core, event
 
 from eegnb.experiments import Experiment
-# from eegnb.devices.EMA_Filters import EMA_Filters
+from eegnb.devices.EMA_Filters import EMA_Filters
 from eegnb.devices.eeg import EEG
 from eegnb import generate_save_fn
 
 from typing import Optional
 
-# import keyboard
+import keyboard
 import socket
 
 
@@ -28,7 +28,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
     '''
     def __init__(self, duration, IP = "127.0.0.1", Port = 800):
       
-        exp_name = "Funni Experiment Thingy"
+        exp_name = "motor_imagery"
         super().__init__(exp_name, duration, eeg = None, save_fn = None, n_trials = None, iti = None, soa = None, jitter = None)
         # self.instruction_text = """\n
         # Welcome to the {} experiment!\n\n
@@ -52,49 +52,39 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         self.endPoint = (IP, Port)
         
 
-    def load_stimulus(self): 
-
-
-        # self.fixation = visual.GratingStim(win=self.window, size=0.2, pos=[0, 8], sf=0.2, color=[1, 0, 0], autoDraw=True)
-
-        
-        # pattern = np.ones((4, 4))
-        # # pattern[::2, ::2] *= -1
-        # # pattern[1::2, 1::2] *= -1
-        # pos1 = [-14, -4]
-        # pos2 = [14, -4]
-        # size = 8
-        # self._stim1 = visual.RadialStim(win=self.window, tex=pattern, pos=pos1,
-        #                                 size=size, radialCycles=2, texRes=256, opacity=1)  
-        # self._stim1_neg = visual.RadialStim(win=self.window, tex=pattern*(-1), pos=pos1,
-        #                                 size=size, radialCycles=2, texRes=256, opacity=1)
-        # self._stim2 = visual.RadialStim(win=self.window, tex=pattern, pos=pos2,
-        #                                 size=size, radialCycles=1, texRes=256, opacity=1)
-        # self._stim2_neg = visual.RadialStim(win=self.window, tex=pattern*(-1), pos=pos2,
-        #                                 size=size, radialCycles=1, texRes=256, opacity=1)
-                                        
-        # fixation = visual.GratingStim(win=self.window, size=0.2, pos=[0, 8], sf=0.2, color=[1, 0, 0], autoDraw=True)
+    def load_stimulus(self):
         pass
 
     def present_stimulus(self):
-        
         self.running = True
-    
+
+        #Push sample
+        #replace with pushing dependent on key input
+        if self.eeg:
+            timestamp = time()
+            if self.eeg.backend == "muselsl":
+                marker = [self.markernames[ind]]
+            else:
+                marker = self.markernames[ind]
+            self.eeg.push_sample(marker=marker, timestamp=timestamp)
+
         def log_key_input():
+            # nonlocal running
             def on_key_event(event):
-                # if event.name == 'a' or event.name == 's':
-                    # marker = b"1" if event.name == 'a' else b"2" 
+                if event.name == 'left' or event.name == 'right':
+                    marker = 1 if event.name == 'left' else 2
                     # print("Marker logged:", marker)
-                    # timestamp = time()
-                    # self.socket.sendto(marker, self.endPoint)
-                    # if self.eeg: 
-                    #     self.eeg.push_sample(marker=marker, timestamp=timestamp)
-                    if event.name == 'space':
-                        print("Experiment interrupted by user")
-                        self.running = False
-            # keyboard.on_press(on_key_event)
+                    timestamp = time()
+                    if self.eeg:
+                        self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                elif event.name == 'space':
+                    print("Experiment interrupted by user")
+                    # if self.eeg: self.eeg._stop_brainflow(), print(self.save_fn)
+                    self.running = False
+            keyboard.on_press(on_key_event)
             # return on_key_event
 
+        event_handler = log_key_input(self)
         log_key_input()
 
         # Present stim
@@ -110,11 +100,11 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         TRIAL_DURATION = 5
         REST_DURATION = 5
 
-        NUM_SETS = 10
-        NUM_MI_SETS = 15
+        NUM_SETS = 1
+        NUM_MI_SETS = 1
 
-        video_path_1 = "eegnb/experiments/visual_ssvep/wrist_flexing_right-1.mp4"
-        video_path_2 = "eegnb/experiments/visual_ssvep/wrist_flexing_right-1.mp4"
+        video_path_1 = r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\movements\wrist_flexing_left.mp4"
+        video_path_2 = r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\movements\wrist_flexing_right-1.mp4"
 
         
         for i in range(NUM_SETS):
@@ -129,7 +119,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
 
 
         
-        # keyboard.unhook_all()
+        keyboard.unhook_all()
 
     def run_set(self, video_path, vid_dur, inst_dur, trial_dur, rest_dur):
         set_start_time = time()
@@ -187,7 +177,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             #video imagine, video 
             if (with_video):
                 # pass # PLAY VIDEO HERE :)
-                video_path = r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\visual_ssvep\wrist_flexing_right-1.mp4"
+
                 # self.video = visual.MovieStim3(win=self.window, filename=video_path, size=(640, 480))
                 mov = visual.MovieStim3(self.window, video_path, size=(800, 600),flipVert=False, flipHoriz=False, loop=False)
                 while mov.status != visual.FINISHED and self.running:
@@ -262,40 +252,40 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         # Setup the experiment, alternatively could get rid of this line, something to think about
         self.setup(instructions)
 
-        # print("Wait for the EEG-stream to start...")
+        print("Wait for the EEG-stream to start...")
 
-        # emaFilt = EMA_Filters()
-        # self._stop_event = threading.Event()
-        # def eeg_stream_thread():
-        #     eeg = self.eeg
-        #     sfreq = eeg.sfreq
-        #     bp_fc_low = self.bp_fc_low
-        #     bp_fc_high = self.bp_fc_high
-        #     n_fc = self.n_fc
+        emaFilt = EMA_Filters()
+        self._stop_event = threading.Event()
+        def eeg_stream_thread():
+            eeg = self.eeg
+            sfreq = eeg.sfreq
+            bp_fc_low = 8
+            bp_fc_high = 30
+            n_fc = 60
 
-        #     while eeg.stream_started and not self._stop_event.is_set():
-        #         data = eeg.board.get_current_board_data(1)
-        #         _, eeg_data, timestamps = eeg._brainflow_extract(data)
-        #         eeg_data_filt = emaFilt.BPF(eeg_data, bp_fc_low, bp_fc_high, sfreq) #bandpass filter
-        #         eeg_data_filt = emaFilt.Notch(eeg_data_filt, n_fc, sfreq) #notch filter
-        #         if len(eeg_data) > 0 and len(timestamps) > 0: # only update if neither is empty
-        #             last_timestamp = data[eeg.timestamp_channel][0]
-        #             eeg.filt_data.append([eeg_data_filt[0].tolist(), last_timestamp])
-        #         else:
-        #             time.sleep(1)
-        #             continue
+            while eeg.stream_started and not self._stop_event.is_set():
+                data = eeg.board.get_current_board_data(1)
+                _, eeg_data, timestamps = eeg._brainflow_extract(data)
+                eeg_data_filt = emaFilt.BPF(eeg_data, bp_fc_low, bp_fc_high, sfreq) #bandpass filter
+                eeg_data_filt = emaFilt.Notch(eeg_data_filt, n_fc, sfreq) #notch filter
+                if len(eeg_data) > 0 and len(timestamps) > 0: # only update if neither is empty
+                    last_timestamp = data[eeg.timestamp_channel][0]
+                    eeg.filt_data.append([eeg_data_filt[0].tolist(), last_timestamp])
+                else:
+                    # time.sleep(1)
+                    continue
 
         # Start EEG Stream, wait for signal to settle, and then pull timestamp for start point
-        # if self.eeg:
-        #     self.eeg.start(self.save_fn, duration=self.record_duration + 10)
-        #     print("eeg stream started")
-        #     eeg_filt_thread = threading.Thread(target=eeg_stream_thread)
-        #     eeg_filt_thread.daemon = True
-        #     eeg_filt_thread.start()
-        #     # time.sleep(10)
-        #     print("eeg_filt_thread initiated")
-        # else: 
-        #     print("No EEG headset connected")
+        if self.eeg:
+            self.eeg.start(self.save_fn, duration=self.record_duration + 10)
+            print("eeg stream started")
+            eeg_filt_thread = threading.Thread(target=eeg_stream_thread)
+            eeg_filt_thread.daemon = True
+            eeg_filt_thread.start()
+            # time.sleep(10)
+            print("eeg_filt_thread initiated")
+        else:
+            print("No EEG headset connected")
 
         print("Experiment started")
         
@@ -305,13 +295,13 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
 
 
         # Closing the EEG stream 
-        # if self.eeg:
-        #     self._stop_event.set()
-        #     eeg_filt_thread.join()
-        #     print("eeg_filt_thread terminated")
+        if self.eeg:
+            self._stop_event.set()
+            eeg_filt_thread.join()
+            print("eeg_filt_thread terminated")
 
-        #     self.eeg._stop_brainflow_save_filt()
-        #     print("Stop EEG stream")
-        #     print("Recording saved at", self.save_fn)
+            self.eeg._stop_brainflow_save_filt()
+            print("Stop EEG stream")
+            print("Recording saved at", self.save_fn)
         # Closing the window
         self.window.close()

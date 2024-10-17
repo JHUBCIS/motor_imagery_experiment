@@ -15,11 +15,11 @@ an experiment.
 import os
 from eegnb import generate_save_fn
 from eegnb.devices.eeg import EEG
-from eegnb.experiments.visual_ssvep.funni_select_unicorn import VisualFunni_select_unicorn
+from eegnb.experiments.motor_imagery.funni_select_unicorn import VisualFunni_select_unicorn
 
 # Define some variables
-board_name = "muse2"
-experiment = "visual_ssvep"
+board_name = "unicorn"
+experiment = "motor_imagery"
 subject_id = 0
 session_nb = 0
 record_duration = 120
