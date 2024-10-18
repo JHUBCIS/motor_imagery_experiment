@@ -88,7 +88,7 @@ def create_stim_array(timestamps, markers):
         timestamps (array of floats): Timestamps from the EEG data.
         markers (array of ints): Markers and their associated timestamps.
     """
-    marker_max = np.max(markers)
+    # marker_max = np.max(markers) # not used anywhere
     num_samples = len(timestamps)
     stim_array = np.zeros((num_samples, 1))
     for marker in markers:
@@ -97,6 +97,22 @@ def create_stim_array(timestamps, markers):
 
     return stim_array
 
+# added by JHUBCIS
+def create_filt_array(timestamps, filt_data, n_channels):
+    """Creates a stim array which is the lenmgth of the EEG data where the stimuli are lined up
+    with their corresponding EEG sample.
+    Parameters:
+        timestamps (array of floats): Timestamps from the EEG data.
+        filt_data (table of ints): Filtered data and their associated timestamps.
+    """
+    num_samples = len(timestamps)
+    filt_array = np.zeros((num_samples, n_channels))
+    for row in filt_data:
+        eeg_data, timestamp = row[0], row[1]
+        idx = np.where(timestamps == timestamp)
+        filt_array[idx, :] = eeg_data
+
+    return filt_array
 
 def get_openbci_usb():
     print("\nGetting a list of available serial ports...")

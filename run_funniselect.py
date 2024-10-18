@@ -39,5 +39,5 @@ print(save_fn)
 # Run experiment
 # ---------------------  
 #  
-ssvep = VisualFunni_select_unicorn(eeg_device, record_duration)
-ssvep.run()
+experiment = VisualFunni_select_unicorn(duration=record_duration, eeg=eeg_device, save_fn=save_fn)
+experiment.run()

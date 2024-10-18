@@ -16,8 +16,7 @@ from eegnb import generate_save_fn
 
 from typing import Optional
 
-import keyboard
-import socket
+
 
 
 
@@ -28,30 +27,20 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
 
     EEG Data streamed and recorded through the Unicorn Recorder
     '''
-    def __init__(self, duration, eeg: Optional[EEG] = None, IP = "127.0.0.1", Port = 800):
+    def __init__(self, duration, eeg: Optional[EEG] = None, save_fn = None):
       
         exp_name = "motor_imagery"
-        super().__init__(exp_name, duration, eeg, save_fn = None, n_trials = None, iti = None, soa = None, jitter = None)
-        # self.instruction_text = """\n
-        # Welcome to the {} experiment!\n\n
-        # When stimuli are presented, use left/right arrow to indicate which stimulus you are looking at.\n
-        # Please pause a bit between selections.\n\n
-        # This experiment will run for %s seconds.\n
-        # Press spacebar to start, press again to interrupt. \n""".format(self.exp_name)
-        self.instruction_text = (
-            "\n"
-            "Welcome to the {} experiment!\n\n"
-            "Please follow the instructions on screen, thank you.\n"
-            "This experiment will run for %s seconds.\n"
-            "Press spacebar to interrupt.\n"
-        ).format(self.exp_name)
+        super().__init__(exp_name, duration, eeg, save_fn, n_trials = None, iti = None, soa = None, jitter = None)
+
+        self.instruction_text ="""\nWelcome to the {} experiment!\n\nWhen stimuli are presented, use left/right arrow to indicate which stimulus you are looking at.\nPlease pause a bit between selections.\n\nThis experiment will run for %s seconds.\nPress spacebar to start, press again to interrupt. \n""".format(
+            self.exp_name)
         # self.freq1 = freq1
         # self.freq2 = freq2
         # self.bp_fc_high = bp_fc_high
         # self.bp_fc_low = bp_fc_low
         # self.n_fc = n_fc
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.endPoint = (IP, Port)
+        # self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # self.endPoint = (IP, Port)
         
 
     def load_stimulus(self):
@@ -60,34 +49,10 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
     def present_stimulus(self):
         self.running = True
 
-        #Push sample
-        #replace with pushing dependent on key input
-
-        # def log_key_input():
-        #     # nonlocal running
-        #     def on_key_event(event):
-        #         if event.name == 'left' or event.name == 'right':
-        #             marker = 1 if event.name == 'left' else 2
-        #             # print("Marker logged:", marker)
-        #             timestamp = time()
-        #             if self.eeg:
-        #                 self.eeg.push_sample(marker=marker, timestamp=timestamp)
-        #         elif event.name == 'space':
-        #             print("Experiment interrupted by user")
-        #             # if self.eeg: self.eeg._stop_brainflow(), print(self.save_fn)
-        #             self.running = False
-        #     keyboard.on_press(on_key_event)
-        #     # return on_key_event
-        #
-        # event_handler = log_key_input(self)
-        # log_key_input()
-
-        # Present stim
-
 
         start_time = time()
         
-        self.socket.sendto(b"1", self.endPoint)
+        # self.socket.sendto(b"1", self.endPoint)
         
 
         VIDEO_DURATION = 5
@@ -103,30 +68,24 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
 
         
         for i in range(NUM_SETS):
-            marker = "Movement 1 4 Blocks"
+            marker = b"14" #movement 1 4 blocks
             timestamp = time()
             self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.run_set(video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
-            Marker = "Movement 2 4 Blocks"
+            Marker = b"24" #movement 2 4 blocks
             timestamp = time()
             self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.run_set(video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
 
         for i in range(NUM_MI_SETS):
-            marker = "Movement 1 Motor Imagery"
+            marker = b"140" #movement 1 motor imagery
             timestamp = time()
             self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.trial_cycle(False, False, video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
-            marker = "Movement 2 Motor Imagery"
+            marker = b"240" #movement 2 motor imagery
             timestamp = time()
             self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.trial_cycle(False, False, video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
-
-
-
-
-        
-        # keyboard.unhook_all()
 
     def run_set(self, video_path, vid_dur, inst_dur, trial_dur, rest_dur):
         set_start_time = time()
@@ -233,6 +192,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
     def setup(self, instructions=True):
 
             # Initializing the record duration and the marker names
+            self.record_duration = np.float32(self.duration)
             self.markernames = [1, 2]
             
             # Setting up the trial and parameter list
