@@ -262,23 +262,6 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         
         pass
 
-        # Save the DataFrame to a CSV file
-        # Directory to save the labels
-        save_dir = "experiment_labels"
-        os.makedirs(save_dir, exist_ok=True)  # Create the directory if it doesn't exist
-
-        # Find an available filename by incrementing the index
-        i = 1
-        while os.path.exists(f"{save_dir}/experiment_{i}.csv"):
-            i += 1
-
-        # Save the DataFrame with the unique filename
-        file_path = f"{save_dir}/experiment_{i}.csv"
-        df = DataFrame(self.stim_labels)  # Assuming `self.stim_labels` is the data to be saved
-        df.to_csv(file_path, index=True)
-
-        print(f"Labels saved to {file_path}")
-
     def setup(self, instructions=True):
 
             # Initializing the record duration and the marker names
@@ -375,3 +358,20 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             print("Recording saved at", self.save_fn)
         # Closing the window
         self.window.close()
+
+        # Save the DataFrame to a CSV file
+        # Directory to save the labels
+        save_dir = "experiment_labels"
+        os.makedirs(save_dir, exist_ok=True)  # Create the directory if it doesn't exist
+
+        # Find an available filename by incrementing the index
+        i = 1
+        while os.path.exists(f"{save_dir}/experiment_{i}.csv"):
+            i += 1
+
+        # Save the DataFrame with the unique filename
+        file_path = f"{save_dir}/experiment_{i}.csv"
+        df = DataFrame(self.stim_labels)  # Assuming `self.stim_labels` is the data to be saved
+        df.to_csv(file_path, index=True)
+
+        print(f"Labels saved to {file_path}")
