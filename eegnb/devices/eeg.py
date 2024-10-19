@@ -23,8 +23,8 @@ from brainflow.board_shim import BoardShim, BoardIds, BrainFlowInputParams
 from muselsl import stream, list_muses, record, constants as mlsl_cnsts
 from pylsl import StreamInfo, StreamOutlet, StreamInlet, resolve_byprop
 
-from eegnb.devices.rolling_buffer import RollingBuffer
-from eegnb.devices.eeg_rt_plot_mpl import EEGRealTimePlotMPL
+# from eegnb.devices.rolling_buffer import RollingBuffer
+# from eegnb.devices.eeg_rt_plot_mpl import EEGRealTimePlotMPL
 from eegnb.devices.EMA_Filters import EMA_Filters
 
 from eegnb.devices.utils import (

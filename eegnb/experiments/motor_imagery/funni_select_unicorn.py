@@ -60,47 +60,59 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         TRIAL_DURATION = 5
         REST_DURATION = 5
 
-        NUM_SETS = 1
-        NUM_MI_SETS = 1
+        NUM_SETS = 10
+        NUM_MI_SETS = 30
 
         video_path_1 = r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\movements\wrist_flexing_left.mp4"
         video_path_2 = r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\movements\wrist_flexing_right-1.mp4"
 
-        
+        trial_count = 1
+        movement = 1
         for i in range(NUM_SETS):
-            marker = b"14" #movement 1 4 blocks
+            movement = 1
+            marker = "{trial_count}9{movement}".format(trial_count=trial_count, movement = movement) #movement 2 4 blocks
+            marker = float(marker)
             timestamp = time()
             self.eeg.push_sample(marker=marker, timestamp=timestamp)
-            self.run_set(video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
-            Marker = b"24" #movement 2 4 blocks
+            self.run_set(video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
+            trial_count = trial_count + 1
+            movement = 2
+            marker = "{trial_count}9{movement}".format(trial_count=trial_count, movement = movement)  # movement 2 4 blocks
+            marker = float(marker)
             timestamp = time()
             self.eeg.push_sample(marker=marker, timestamp=timestamp)
-            self.run_set(video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
+            self.run_set(video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
+            trial_count = trial_count + 1
 
         for i in range(NUM_MI_SETS):
-            marker = b"140" #movement 1 motor imagery
+            movement = 1
+            marker = "{trial}00{movement}".format(trial = trial_count, movement=movement) #movement 1 motor imagery
+            marker = float(marker)
             timestamp = time()
             self.eeg.push_sample(marker=marker, timestamp=timestamp)
-            self.trial_cycle(False, False, video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
-            marker = b"240" #movement 2 motor imagery
+            self.trial_cycle(False, True, video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
+            trial_count = trial_count + 1
+            movement = 2
+            marker = "{trial}00{movement}".format(trial=trial_count, movement=movement)  # movement 1 motor imagery
+            marker = float(marker)
             timestamp = time()
             self.eeg.push_sample(marker=marker, timestamp=timestamp)
-            self.trial_cycle(False, False, video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION)
-
-    def run_set(self, video_path, vid_dur, inst_dur, trial_dur, rest_dur):
+            self.trial_cycle(False, True, video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
+            trial_count = trial_count + 1
+    def run_set(self, video_path, vid_dur, inst_dur, trial_dur, rest_dur, trial_count, movement):
         set_start_time = time()
-        self.trial_cycle(True, True, video_path, vid_dur, inst_dur, trial_dur, rest_dur)
-        self.trial_cycle(True, False, video_path, vid_dur, inst_dur, trial_dur, rest_dur)
-        self.trial_cycle(False, True, video_path, vid_dur, inst_dur, trial_dur, rest_dur)
-        self.trial_cycle(False, False, video_path, vid_dur, inst_dur, trial_dur, rest_dur)
+        self.trial_cycle(True, False, video_path, vid_dur, inst_dur, trial_dur, rest_dur, trial_count, movement)
+        self.trial_cycle(True, True, video_path, vid_dur, inst_dur, trial_dur, rest_dur, trial_count, movement)
+        self.trial_cycle(False, False, video_path, vid_dur, inst_dur, trial_dur, rest_dur, trial_count, movement)
+        self.trial_cycle(False, True, video_path, vid_dur, inst_dur, trial_dur, rest_dur, trial_count, movement)
 
-    def trial_cycle(self, with_video, is_imagery, video_path, vid_dur, inst_dur, trial_dur, rest_dur):
+    def trial_cycle(self, with_video, is_imagery, video_path, vid_dur, inst_dur, trial_dur, rest_dur, trial_count, movement):
         
         action_prompt = visual.TextStim(
                     self.window, 
                     text=(
                         "Prepare to do\n"
-                        "the action shown.\n"
+                        "the movement {movement}.\n".format(movement = movement)
                         ), 
                     wrapWidth=30,
                     alignText='center',
@@ -110,7 +122,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
                     self.window, 
                     text=(
                         "Prepare to imagine\n"
-                        "the action shown.\n"
+                        "movement {movement}.\n".format(movement = movement)
                         ), 
                     wrapWidth=30,
                     alignText='center',
@@ -118,8 +130,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         perform_action_prompt = visual.TextStim(
             self.window,
             text=(
-                "Perform the \n"
-                "action shown.\n"
+                "Perform movement {movement}".format(movement = movement)
             ),
             wrapWidth=30,
             alignText='center',
@@ -128,8 +139,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         perform_imagery_prompt = visual.TextStim(
             self.window,
             text=(
-                "Imagine the\n"
-                "action shown.\n"
+                "Imagine movement {movement}".format(movement = movement)
             ),
             wrapWidth=30,
             alignText='center',
@@ -153,22 +163,48 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             #video imagine, video 
             if (with_video):
                 # pass # PLAY VIDEO HERE :)
+                vid = 1
 
                 # self.video = visual.MovieStim3(win=self.window, filename=video_path, size=(640, 480))
                 mov = visual.MovieStim3(self.window, video_path, size=(800, 600),flipVert=False, flipHoriz=False, loop=False)
                 while mov.status != visual.FINISHED and self.running:
+                    marker = "{trial}{vid}{movement}".format(trial = trial_count, vid = vid, movement = movement)  # movement 1 4 blocks
+                    marker = float(marker)
+                    timestamp = time()
+                    self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                    movement_description = visual.TextStim(
+                        win=self.window,
+                        text="Movement {movement}".format(movement=movement),
+                        wrapWidth=30,  # Wrap width in pixels
+                        alignText='left',  # Center align the text
+                        color='white',
+                    )
                     mov.draw()
+                    movement_description.draw()
                     self.window.flip()
-            
-
-            self.window.flip()
+                self.window.flip()
+            else:
+                vid = 0
+                marker = "{trial}{vid}{movement}".format(trial = trial_count, vid = vid, movement = movement)  # movement 1 4 blocks
+                marker = float(marker)
+                timestamp = time()
+                self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                pass
         
         instruction_start_time = time()
         while self.running and time() < (instruction_start_time + inst_dur): # play instructions 
             
             if (is_imagery):
+                marker = "{trial_count}2{movement}".format(trial_count=trial_count, movement=movement)  # movement 1 4 blocks
+                marker = float(marker)
+                timestamp = time()
+                self.eeg.push_sample(marker=marker, timestamp=timestamp)
                 imagery_prompt.draw()
             else:
+                marker = "{trial_count}2{movement}".format(trial_count=trial_count, movement=movement)  # movement 1 4 blocks
+                marker = float(marker)
+                timestamp = time()
+                self.eeg.push_sample(marker=marker, timestamp=timestamp)
                 action_prompt.draw()
             
             self.window.flip()
@@ -176,13 +212,25 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         perform_start_time = time()
         while self.running and time() < (perform_start_time + trial_dur): # show perform prompt
             if (is_imagery):
+                marker = "{trial}3{movement}".format(trial = trial_count, movement = movement)  # movement 1 4 blocks
+                marker = float(marker)
+                timestamp = time()
+                self.eeg.push_sample(marker=marker, timestamp=timestamp)
                 perform_imagery_prompt.draw()
             else:
+                marker = "{trial}4{movement}".format(trial=trial_count, movement=movement)  # movement 1 4 blocks
+                marker = float(marker)
+                timestamp = time()
+                self.eeg.push_sample(marker=marker, timestamp=timestamp)
                 perform_action_prompt.draw()
             self.window.flip()
         
         rest_start_time = time()
         while self.running and time() < (rest_start_time + rest_dur): # rest for 5 seconds
+            marker = "{trial}5{movement}".format(trial=trial_count, movement=movement)  # movement 1 4 blocks
+            marker = float(marker)
+            timestamp = time()
+            self.eeg.push_sample(marker=marker, timestamp=timestamp)
             rest_prompt.draw()
             self.window.flip()
         
@@ -280,7 +328,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             eeg_filt_thread.join()
             print("eeg_filt_thread terminated")
 
-            self.eeg._stop_brainflow_save_filt()
+            self.eeg._stop_brainflow()
             print("Stop EEG stream")
             print("Recording saved at", self.save_fn)
         # Closing the window
