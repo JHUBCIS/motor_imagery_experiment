@@ -41,6 +41,8 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         # self.n_fc = n_fc
         # self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         # self.endPoint = (IP, Port)
+        self.stim_labels = {"marker": [],
+                            "timestamp": []}
         
 
     def load_stimulus(self):
@@ -73,14 +75,19 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             marker = "{trial_count}9{movement}".format(trial_count=trial_count, movement = movement) #movement 2 4 blocks
             marker = float(marker)
             timestamp = time()
-            self.eeg.push_sample(marker=marker, timestamp=timestamp)
+            # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+            self.stim_labels["marker"].append(marker)
+            self.stim_labels["timestamp"].append(timestamp)
             self.run_set(video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
             trial_count = trial_count + 1
+            
             movement = 2
             marker = "{trial_count}9{movement}".format(trial_count=trial_count, movement = movement)  # movement 2 4 blocks
             marker = float(marker)
             timestamp = time()
-            self.eeg.push_sample(marker=marker, timestamp=timestamp)
+            # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+            self.stim_labels["marker"].append(marker)
+            self.stim_labels["timestamp"].append(timestamp)
             self.run_set(video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
             trial_count = trial_count + 1
 
@@ -89,14 +96,19 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             marker = "{trial}00{movement}".format(trial = trial_count, movement=movement) #movement 1 motor imagery
             marker = float(marker)
             timestamp = time()
-            self.eeg.push_sample(marker=marker, timestamp=timestamp)
+            # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+            self.stim_labels["marker"].append(marker)
+            self.stim_labels["timestamp"].append(timestamp)
             self.trial_cycle(False, True, video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
             trial_count = trial_count + 1
+            
             movement = 2
             marker = "{trial}00{movement}".format(trial=trial_count, movement=movement)  # movement 1 motor imagery
             marker = float(marker)
             timestamp = time()
-            self.eeg.push_sample(marker=marker, timestamp=timestamp)
+            # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+            self.stim_labels["marker"].append(marker)
+            self.stim_labels["timestamp"].append(timestamp)
             self.trial_cycle(False, True, video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
             trial_count = trial_count + 1
     def run_set(self, video_path, vid_dur, inst_dur, trial_dur, rest_dur, trial_count, movement):
@@ -171,7 +183,9 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
                     marker = "{trial}{vid}{movement}".format(trial = trial_count, vid = vid, movement = movement)  # movement 1 4 blocks
                     marker = float(marker)
                     timestamp = time()
-                    self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                    # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                    self.stim_labels["marker"].append(marker)
+                    self.stim_labels["timestamp"].append(timestamp)
                     movement_description = visual.TextStim(
                         win=self.window,
                         text="Movement {movement}".format(movement=movement),
@@ -188,7 +202,9 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
                 marker = "{trial}{vid}{movement}".format(trial = trial_count, vid = vid, movement = movement)  # movement 1 4 blocks
                 marker = float(marker)
                 timestamp = time()
-                self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                self.stim_labels["marker"].append(marker)
+                self.stim_labels["timestamp"].append(timestamp)
                 pass
         
         instruction_start_time = time()
@@ -198,13 +214,17 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
                 marker = "{trial_count}2{movement}".format(trial_count=trial_count, movement=movement)  # movement 1 4 blocks
                 marker = float(marker)
                 timestamp = time()
-                self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                self.stim_labels["marker"].append(marker)
+                self.stim_labels["timestamp"].append(timestamp)
                 imagery_prompt.draw()
             else:
                 marker = "{trial_count}2{movement}".format(trial_count=trial_count, movement=movement)  # movement 1 4 blocks
                 marker = float(marker)
                 timestamp = time()
-                self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                self.stim_labels["marker"].append(marker)
+                self.stim_labels["timestamp"].append(timestamp)
                 action_prompt.draw()
             
             self.window.flip()
@@ -215,13 +235,17 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
                 marker = "{trial}3{movement}".format(trial = trial_count, movement = movement)  # movement 1 4 blocks
                 marker = float(marker)
                 timestamp = time()
-                self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                self.stim_labels["marker"].append(marker)
+                self.stim_labels["timestamp"].append(timestamp)
                 perform_imagery_prompt.draw()
             else:
                 marker = "{trial}4{movement}".format(trial=trial_count, movement=movement)  # movement 1 4 blocks
                 marker = float(marker)
                 timestamp = time()
-                self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                self.stim_labels["marker"].append(marker)
+                self.stim_labels["timestamp"].append(timestamp)
                 perform_action_prompt.draw()
             self.window.flip()
         
@@ -230,12 +254,30 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             marker = "{trial}5{movement}".format(trial=trial_count, movement=movement)  # movement 1 4 blocks
             marker = float(marker)
             timestamp = time()
-            self.eeg.push_sample(marker=marker, timestamp=timestamp)
+            # self.eeg.push_sample(marker=marker, timestamp=timestamp)
+            self.stim_labels["marker"].append(marker)
+            self.stim_labels["timestamp"].append(timestamp)
             rest_prompt.draw()
             self.window.flip()
         
         pass
 
+        # Save the DataFrame to a CSV file
+        # Directory to save the labels
+        save_dir = "experiment_labels"
+        os.makedirs(save_dir, exist_ok=True)  # Create the directory if it doesn't exist
+
+        # Find an available filename by incrementing the index
+        i = 1
+        while os.path.exists(f"{save_dir}/experiment_{i}.csv"):
+            i += 1
+
+        # Save the DataFrame with the unique filename
+        file_path = f"{save_dir}/experiment_{i}.csv"
+        df = DataFrame(self.stim_labels)  # Assuming `self.stim_labels` is the data to be saved
+        df.to_csv(file_path, index=True)
+
+        print(f"Labels saved to {file_path}")
 
     def setup(self, instructions=True):
 
