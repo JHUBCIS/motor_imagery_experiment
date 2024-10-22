@@ -43,7 +43,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
         # self.endPoint = (IP, Port)
         # self.stim_labels = {"marker": [],
                             # "timestamp": []}
-        self.experiment_marker = None
+        # self.experiment_marker = None
         
 
     def load_stimulus(self):
@@ -76,10 +76,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             marker = "{trial_count}9{movement}".format(trial_count=trial_count, movement = movement) #movement 2 4 blocks
             marker = float(marker)
             timestamp = time()
-            # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-            # self.stim_labels["marker"].append(marker)
-            # self.stim_labels["timestamp"].append(timestamp)
-            self.experiment_marker = marker
+            self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.run_set(video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
             trial_count = trial_count + 1
             
@@ -87,10 +84,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             marker = "{trial_count}9{movement}".format(trial_count=trial_count, movement = movement)  # movement 2 4 blocks
             marker = float(marker)
             timestamp = time()
-            # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-            # self.stim_labels["marker"].append(marker)
-            # self.stim_labels["timestamp"].append(timestamp)
-            self.experiment_marker = marker
+            self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.run_set(video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
             trial_count = trial_count + 1
 
@@ -99,10 +93,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             marker = "{trial}00{movement}".format(trial = trial_count, movement=movement) #movement 1 motor imagery
             marker = float(marker)
             timestamp = time()
-            # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-            # self.stim_labels["marker"].append(marker)
-            # self.stim_labels["timestamp"].append(timestamp)
-            self.experiment_marker = marker
+            self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.trial_cycle(False, True, video_path_1, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
             trial_count = trial_count + 1
             
@@ -110,10 +101,7 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             marker = "{trial}00{movement}".format(trial=trial_count, movement=movement)  # movement 1 motor imagery
             marker = float(marker)
             timestamp = time()
-            # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-            # self.stim_labels["marker"].append(marker)
-            # self.stim_labels["timestamp"].append(timestamp)
-            self.experiment_marker = marker
+            self.eeg.push_sample(marker=marker, timestamp=timestamp)
             self.trial_cycle(False, True, video_path_2, VIDEO_DURATION, INSTRUCTION_DURATION, TRIAL_DURATION, REST_DURATION, trial_count, movement)
             trial_count = trial_count + 1
     def run_set(self, video_path, vid_dur, inst_dur, trial_dur, rest_dur, trial_count, movement):
@@ -182,16 +170,17 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
                 # pass # PLAY VIDEO HERE :)
                 vid = 1
 
+                sent_marker = False
+
                 # self.video = visual.MovieStim3(win=self.window, filename=video_path, size=(640, 480))
                 mov = visual.MovieStim3(self.window, video_path, size=(800, 600),flipVert=False, flipHoriz=False, loop=False)
                 while mov.status != visual.FINISHED and self.running:
                     marker = "{trial}{vid}{movement}".format(trial = trial_count, vid = vid, movement = movement)  # movement 1 4 blocks
                     marker = float(marker)
                     timestamp = time()
-                    # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-                    # self.stim_labels["marker"].append(marker)
-                    # self.stim_labels["timestamp"].append(timestamp)
-                    self.experiment_marker = marker
+                    if not sent_marker:
+                        self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                        sent_marker = True
                     movement_description = visual.TextStim(
                         win=self.window,
                         text="Movement {movement}".format(movement=movement),
@@ -208,55 +197,54 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
                 marker = "{trial}{vid}{movement}".format(trial = trial_count, vid = vid, movement = movement)  # movement 1 4 blocks
                 marker = float(marker)
                 timestamp = time()
-                # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-                # self.stim_labels["marker"].append(marker)
-                # self.stim_labels["timestamp"].append(timestamp)
-                self.experiment_marker = marker
+                if not sent_marker:
+                    self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                    sent_marker = True
                 pass
         
         instruction_start_time = time()
+
+        sent_marker = False
         while self.running and time() < (instruction_start_time + inst_dur): # play instructions 
             
             if (is_imagery):
                 marker = "{trial_count}2{movement}".format(trial_count=trial_count, movement=movement)  # movement 1 4 blocks
                 marker = float(marker)
                 timestamp = time()
-                # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-                # self.stim_labels["marker"].append(marker)
-                # self.stim_labels["timestamp"].append(timestamp)
-                self.experiment_marker = marker
+                if not sent_marker:
+                    self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                    sent_marker = True
                 imagery_prompt.draw()
             else:
                 marker = "{trial_count}2{movement}".format(trial_count=trial_count, movement=movement)  # movement 1 4 blocks
                 marker = float(marker)
                 timestamp = time()
-                # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-                # self.stim_labels["marker"].append(marker)
-                # self.stim_labels["timestamp"].append(timestamp)
-                self.experiment_marker = marker
+                if not sent_marker:
+                    self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                    sent_marker = True
                 action_prompt.draw()
             
             self.window.flip()
         
         perform_start_time = time()
+
+        sent_marker = False
         while self.running and time() < (perform_start_time + trial_dur): # show perform prompt
             if (is_imagery):
                 marker = "{trial}3{movement}".format(trial = trial_count, movement = movement)  # movement 1 4 blocks
                 marker = float(marker)
                 timestamp = time()
-                # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-                # self.stim_labels["marker"].append(marker)
-                # self.stim_labels["timestamp"].append(timestamp)
-                self.experiment_marker = marker
+                if not sent_marker: 
+                    self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                    sent_marker = True
                 perform_imagery_prompt.draw()
             else:
                 marker = "{trial}4{movement}".format(trial=trial_count, movement=movement)  # movement 1 4 blocks
                 marker = float(marker)
                 timestamp = time()
-                # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-                # self.stim_labels["marker"].append(marker)
-                # self.stim_labels["timestamp"].append(timestamp)
-                self.experiment_marker = marker
+                if not sent_marker: 
+                    self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                    sent_marker = True
                 perform_action_prompt.draw()
             self.window.flip()
         
@@ -265,10 +253,9 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
             marker = "{trial}5{movement}".format(trial=trial_count, movement=movement)  # movement 1 4 blocks
             marker = float(marker)
             timestamp = time()
-            # self.eeg.push_sample(marker=marker, timestamp=timestamp)
-            # self.stim_labels["marker"].append(marker)
-            # self.stim_labels["timestamp"].append(timestamp)
-            self.experiment_marker = marker
+            if not sent_marker: 
+                    self.eeg.push_sample(marker=marker, timestamp=timestamp)
+                    sent_marker = True
             rest_prompt.draw()
             self.window.flip()
         
@@ -336,7 +323,8 @@ class VisualFunni_select_unicorn(Experiment.BaseExperiment):
                 if len(eeg_data) > 0 and len(timestamps) > 0: # only update if neither is empty
                     last_timestamp = data[eeg.timestamp_channel][0]
                     eeg.filt_data.append([eeg_data_filt[0].tolist(), last_timestamp])
-                    eeg.filt_data.append(self.experiment_marker)
+                    # eeg.filt_data.append(self.experiment_marker)
+                    # self.eeg.markers.append(self.experiment_marker)
                 else:
                     # time.sleep(1)
                     continue
