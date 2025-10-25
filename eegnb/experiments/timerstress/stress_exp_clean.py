@@ -66,7 +66,7 @@ class Stress_exp(Experiment.BaseExperiment):
     def present_stimulus(self):
         self.running = True
 
-        TOTAL_DURATION = 10 * 60  # For reference only
+        TOTAL_DURATION = 10 * 60  
         start_time = time.time()
         
         print("\n[--- Stimulus Presentation/Timer Active ---]")
@@ -92,9 +92,6 @@ class Stress_exp(Experiment.BaseExperiment):
             # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
             self.stim = self.load_stimulus()
             
-            # Show Instruction Screen if not skipped by the user
-            # if instructions:
-            #     self.show_instructions()
 
             # Checking for EEG to setup the EEG stream
             if self.eeg:

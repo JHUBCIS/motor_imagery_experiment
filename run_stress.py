@@ -15,7 +15,8 @@ an experiment.
 import os
 from eegnb import generate_save_fn
 from eegnb.devices.eeg import EEG
-from eegnb.experiments.timerstress.stress_exp import Stress_exp
+# from eegnb.experiments.timerstress.stress_exp import Stress_exp
+from eegnb.experiments.timerstress.stress_exp_clean import Stress_exp
 # from eegnb.stress_exp_2 import Stress_exp
 
 # Define some variables
