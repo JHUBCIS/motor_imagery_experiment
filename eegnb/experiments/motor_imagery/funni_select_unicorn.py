@@ -15,7 +15,7 @@ from eegnb import generate_save_fn
 from typing import Optional
 
 
-class VisualFunniSelectUnicorn(Experiment.BaseExperiment):
+class VisualFunni_select_unicorn(Experiment.BaseExperiment):
     '''
     Blah Blah Blah it's cool :)
 
@@ -38,16 +38,16 @@ class VisualFunniSelectUnicorn(Experiment.BaseExperiment):
         self.running = True
 
         VIDEO_DURATION = 5
-        INSTRUCTION_DURATION = 2
-        TRIAL_DURATION = 5
-        REST_DURATION = 5
+        INSTRUCTION_DURATION = 1
+        TRIAL_DURATION = 2
+        REST_DURATION = 1
 
-        NUM_SETS = 10
-        NUM_MI_SETS = 30
+        NUM_SETS = 0
+        NUM_MI_SETS = 1
 
         video_paths = [
-            r"/home/daniel/Documents/motor_imagery_experiment/eegnb/experiments/motor_imagery/movements/movements/wrist_flexing_left.mp4",
-            r"/home/daniel/Documents/motor_imagery_experiment/eegnb/experiments/motor_imagery/movements/movements/wrist_flexing_right-1.mp4"
+            r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\movements\wrist_flexing_left.mp4",
+            r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\movements\wrist_flexing_right-1.mp4"
         ]
 
         trial_count = 1
@@ -71,7 +71,7 @@ class VisualFunniSelectUnicorn(Experiment.BaseExperiment):
             "imagery": visual.TextStim(self.window, text=f"Prepare to imagine\nmovement {movement}.", wrapWidth=30, alignText='center', color='white'),
             "perform_action": visual.TextStim(self.window, text=f"Perform movement {movement}", wrapWidth=30, alignText='center', color='white'),
             "perform_imagery": visual.TextStim(self.window, text=f"Imagine movement {movement}", wrapWidth=30, alignText='center', color='white'),
-            "rest": visual.TextStim(self.window, text="Rest for 5 seconds.\nPrepare for next trial.", wrapWidth=30, alignText='center', color='white')
+            "rest": visual.TextStim(self.window, text="Rest for 1 second.\nPrepare for next trial.", wrapWidth=30, alignText='center', color='white')
         }
 
         self._run_phase("video", with_video, video_path, vid_dur, trial_count, movement)
