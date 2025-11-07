@@ -15,7 +15,7 @@ an experiment.
 import os
 from eegnb import generate_save_fn
 from eegnb.devices.eeg import EEG
-from eegnb.experiments.motor_imagery.funni_select_unicorn import VisualFunni_select_unicorn
+from eegnb.experiments.motor_imagery.motor_imagery_clean_lucky import MotorImageryExperiment
 
 # Define some variables
 board_name = "unicorn"
@@ -39,5 +39,5 @@ print(save_fn)
 # Run experiment
 # ---------------------  
 #  
-experiment = VisualFunni_select_unicorn(duration=record_duration, eeg=eeg_device, save_fn=save_fn)
+experiment = MotorImageryExperiment(duration=record_duration, eeg=eeg_device, save_fn=save_fn)
 experiment.run()
