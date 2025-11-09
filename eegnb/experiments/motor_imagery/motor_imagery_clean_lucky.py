@@ -355,32 +355,21 @@ class MotorImageryExperiment(Experiment.BaseExperiment):
             print("Experiment ended")
         
         finally:
-            # --- GUARANTEED CLEANUP (Runs even on Ctrl-C or Exception) ---
-
             if self.eeg:
                 self._stop_event.set()
                 if eeg_filt_thread:
                     eeg_filt_thread.join()
                     print("eeg_filt_thread terminated")
-                
-                # --- ROBUST BRAINFLOW CLEANUP (Your existing code) ---
-                # Step 1: Attempt to stop the stream gracefully
+        
+                # Use the eegnb wrapper so data is flushed & files are written
                 try:
-                    self.eeg.board.stop_stream() 
-                    print("Stop EEG stream successful.")
+                    self.eeg._stop_brainflow()
+                    print("Stop EEG stream")
                 except Exception as e:
-                    print(f"Warning: Failed to stop stream gracefully (Headset probably disconnected: {e}).")
-                
-                # Step 2: Force release the session
-                try:
-                    self.eeg.board.release_session()
-                    print("BrainFlow session released.")
-                except Exception as e:
-                    print(f"Warning: Could not release session cleanly: {e}")
-                
+                    print(f"[EEG] _stop_brainflow failed: {e}")
                 print("Recording saved at", self.save_fn)
             
-            # --- Pygame cleanup ---
             pygame.quit()
             print("Pygame display closed.")
+
             # ----------------------------------------------------
