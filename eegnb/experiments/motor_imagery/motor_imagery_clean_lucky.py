@@ -26,11 +26,7 @@ class MotorImageryExperiment(Experiment.BaseExperiment):
         exp_name = "motor_imagery"
         super().__init__(exp_name, duration, eeg, save_fn, n_trials=None, iti=None, soa=None, jitter=None)
 
-        self.instruction_text = (
-            "\nWelcome to the {} experiment!\n\nWhen stimuli are presented, use left/right arrow to indicate which "
-            "stimulus you are looking at.\nPlease pause a bit between selections.\n\nThis experiment will run for %s "
-            "seconds.\nPress spacebar to start, press again to interrupt. \n".format(self.exp_name)
-        )
+        self.instruction_text = ("You will take turns watching a movement and following the instructions on screen. Press spacebar to start, press again to interrupt.")
         self.window = None # Will hold the pygame display surface
         self.window_size = (1536, 864) # Use a fixed resolution for text centering
         self.fps = 60 # Set a consistent target frame rate
@@ -79,18 +75,18 @@ class MotorImageryExperiment(Experiment.BaseExperiment):
         # Input handling is now managed by _handle_input() in the main thread loops.
 
 
-        VIDEO_DURATION = 5
-        INSTRUCTION_DURATION = 1
+        VIDEO_DURATION = 2
+        INSTRUCTION_DURATION = 3
         TRIAL_DURATION = 2
-        REST_DURATION = 1
+        REST_DURATION = 3
 
-        NUM_SETS = 1
-        NUM_MI_SETS = 0
+        NUM_SETS = 10        # 36 seconds? * 2 per
+        NUM_MI_SETS = 30     # 16 seconds? * 2 per
 
         # Preserving original hardcoded paths
         video_paths = [
-            r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\movements\wrist_flexing_left.mp4",
-            r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\movements\wrist_flexing_right-1.mp4"
+            r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\movements\wrist_flexing_left.mov",
+            r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\movements\wrist_flexing_right.mov"
         ]
 
         trial_count = 1
@@ -119,11 +115,11 @@ class MotorImageryExperiment(Experiment.BaseExperiment):
         
         # Pre-render all text stimuli using the new Pygame helper
         prompts = {
-            "action": self._create_pygame_text(f"Prepare to do\nthe movement {movement}."),
-            "imagery": self._create_pygame_text(f"Prepare to imagine\nmovement {movement}."),
+            "action": self._create_pygame_text(f"Prepare to do the movement {movement}."),
+            "imagery": self._create_pygame_text(f"Prepare to imagine movement {movement}."),
             "perform_action": self._create_pygame_text(f"Perform movement {movement}"),
             "perform_imagery": self._create_pygame_text(f"Imagine movement {movement}"),
-            "rest": self._create_pygame_text("Rest for 1 second.\nPrepare for next trial.")
+            "rest": self._create_pygame_text(f"Rest for {rest_dur} seconds. Prepare for next trial.")
         }
         
         if self.running:

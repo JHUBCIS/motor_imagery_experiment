@@ -22,7 +22,7 @@ board_name = "unicorn"
 experiment = "motor_imagery"
 subject_id = 0
 session_nb = 0
-record_duration = 120
+record_duration = 20
 
 ###################################################################################################
 # Initiate EEG device
