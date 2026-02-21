@@ -20,9 +20,9 @@ from eegnb.experiments.motor_imagery.motor_imagery_clean_lucky import MotorImage
 # Define some variables
 board_name = "unicorn"
 experiment = "motor_imagery"
-subject_id = 0
-session_nb = 0
-record_duration = 20
+subject_id = 100
+session_nb = 1
+record_duration = 10
 
 ###################################################################################################
 # Initiate EEG device

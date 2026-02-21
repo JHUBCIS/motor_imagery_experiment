@@ -6,6 +6,7 @@ import random
 import numpy as np
 from pandas import DataFrame
 import pygame
+import random
 import cv2 # For video handling
 
 from eegnb.experiments import Experiment
@@ -75,13 +76,13 @@ class MotorImageryExperiment(Experiment.BaseExperiment):
         # Input handling is now managed by _handle_input() in the main thread loops.
 
 
-        VIDEO_DURATION = 2
+        VIDEO_DURATION = 5
         INSTRUCTION_DURATION = 3
-        TRIAL_DURATION = 2
+        TRIAL_DURATION = 5
         REST_DURATION = 3
 
-        NUM_SETS = 10        # 36 seconds? * 2 per
-        NUM_MI_SETS = 30     # 16 seconds? * 2 per
+        NUM_SETS = 3         # 54 seconds? * 2 per
+        NUM_MI_SETS = 10     # 11 seconds? * 2 per
 
         # Preserving original hardcoded paths
         video_paths = [
@@ -113,12 +114,14 @@ class MotorImageryExperiment(Experiment.BaseExperiment):
 
     def trial_cycle(self, with_video, is_imagery, video_path, vid_dur, inst_dur, trial_dur, rest_dur, trial_count, movement):
         
+        side = 'left' if (movement == 1) else 'right'
+
         # Pre-render all text stimuli using the new Pygame helper
         prompts = {
-            "action": self._create_pygame_text(f"Prepare to do the movement {movement}."),
-            "imagery": self._create_pygame_text(f"Prepare to imagine movement {movement}."),
-            "perform_action": self._create_pygame_text(f"Perform movement {movement}"),
-            "perform_imagery": self._create_pygame_text(f"Imagine movement {movement}"),
+            "action": self._create_pygame_text(f"Prepare to do the {side} movement."),
+            "imagery": self._create_pygame_text(f"Prepare to imagine {side} movement."),
+            "perform_action": self._create_pygame_text(f"Perform {side} movement."),
+            "perform_imagery": self._create_pygame_text(f"Imagine {side} movement."),
             "rest": self._create_pygame_text(f"Rest for {rest_dur} seconds. Prepare for next trial.")
         }
         
@@ -126,6 +129,12 @@ class MotorImageryExperiment(Experiment.BaseExperiment):
             self._run_phase("video", with_video, video_path, vid_dur, trial_count, movement)
         if self.running:
             content = prompts["imagery"] if is_imagery else prompts["action"]
+
+            num = random.randint(0,1)
+            if num == 1:
+                sound = pygame.mixer.Sound(r"C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\experiments\motor_imagery\sounds\beep.wav")
+                sound.play()
+            
             self._run_phase("instruction", False, content, inst_dur, trial_count, movement, "2")
         if self.running:
             content = prompts["perform_imagery"] if is_imagery else prompts["perform_action"]

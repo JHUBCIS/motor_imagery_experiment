@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "C:\Users\kthbl\Documents\motor_imagery_experiment\headless_motor_imagery.py", line 139, in run
+    self.eeg = EEG(device=self.device_name)  # adapt if your device needs extra kwargs
+  File "C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\devices\eeg.py", line 93, in __init__
+    self.initialize_backend()
+  File "C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\devices\eeg.py", line 103, in initialize_backend
+    self._init_brainflow()
+  File "C:\Users\kthbl\Documents\motor_imagery_experiment\eegnb\devices\eeg.py", line 306, in _init_brainflow
+    self.board.prepare_session()
+  File "C:\Users\kthbl\miniconda3\envs\eeg-expy-py3.9\lib\site-packages\brainflow\board_shim.py", line 1190, in prepare_session
+    raise BrainFlowError('unable to prepare streaming session', res)
+brainflow.exit_codes.BrainFlowError: BOARD_NOT_READY_ERROR:7 unable to prepare streaming session

@@ -91,7 +91,6 @@ class Stress_exp(Experiment.BaseExperiment):
             
             # Loading the stimulus from the specific experiment, throws an error if not overwritten in the specific experiment
             self.stim = self.load_stimulus()
-            
 
             # Checking for EEG to setup the EEG stream
             if self.eeg:
